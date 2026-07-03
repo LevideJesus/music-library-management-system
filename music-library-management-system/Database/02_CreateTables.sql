@@ -9,3 +9,36 @@ Country VARCHAR(50),
 Biography LONGTEXT
 
 );
+
+CREATE TABLE Albums
+(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+AlbumName VARCHAR(100),
+RealeseDate DATE,
+ArtistId INT,
+FOREIGN KEY (ArtistId) REFERENCES Artists(Id)
+
+);
+
+
+CREATE TABLE Songs
+(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+Name VARCHAR(100),
+Duration INT,
+Genre VARCHAR(50),
+ArtistId INT,
+FOREIGN KEY (ArtistId) REFERENCES Artists(Id),
+AlbumId INT,
+FOREIGN KEY (AlbumId) REFERENCES Albums(Id)
+
+);
+
+CREATE TABLE ListeningHistory
+(
+Id INT AUTO_INCREMENT PRIMARY KEY,
+SongId INT,
+FOREIGN KEY (SongId) REFERENCES Songs(Id),
+PlayedAt DATETIME
+
+);
