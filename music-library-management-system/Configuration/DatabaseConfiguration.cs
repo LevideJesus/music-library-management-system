@@ -1,0 +1,15 @@
+﻿using System;
+using MySql.Data.MySqlClient;
+
+namespace music_library_management_system.Configuration
+{
+    public class DatabaseConfiguration
+    {
+        public string Server { get; set; }
+        public string Database { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+
+       
+    }   
+}
