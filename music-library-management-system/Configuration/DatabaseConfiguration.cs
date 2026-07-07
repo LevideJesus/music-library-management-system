@@ -1,6 +1,4 @@
-﻿using System;
-using MySql.Data.MySqlClient;
-
+﻿
 namespace music_library_management_system.Configuration
 {
     public class DatabaseConfiguration
