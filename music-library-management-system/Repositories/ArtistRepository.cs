@@ -1,6 +1,7 @@
 ﻿using music_library_management_system.Data;
 using music_library_management_system.Models;
 using MySql.Data.MySqlClient;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace music_library_management_system.Repositories
@@ -47,5 +48,52 @@ namespace music_library_management_system.Repositories
                 }
             }
         }
+
+        public List<Artist> GetAllArtists()
+        {
+            List<Artist> artists = new List<Artist>();
+
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
+            {
+                try
+                {
+                    string query = @"SELECT 
+                                    Id, 
+                                    Name, 
+                                    DateOfBirth, 
+                                    Country, 
+                                    Biography
+                                    FROM Artists;";
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        connection.Open();
+
+                        MySqlDataReader reader = command.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            Artist artist = new Artist();
+                            artist.Id = reader.GetInt32("Id");
+                            artist.Name = reader.GetString("Name");
+                            artist.DateOfBirth = reader.GetDateTime("DateOfBirth");
+                            artist.Country = reader.GetString("Country");
+                            artist.Biography = reader.GetString("Biography");
+
+                            artists.Add(artist);
+                        }
+                       
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    Console.WriteLine($"Error while reading artists: {ex.Message}");
+                }
+            }
+
+            return artists;
+        }
+
+
     }
 }
