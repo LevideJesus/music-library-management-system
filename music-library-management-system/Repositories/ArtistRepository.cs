@@ -94,6 +94,42 @@ namespace music_library_management_system.Repositories
             return artists;
         }
 
+        public void UpdateArtist(Artist artist)
+        {
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
+            {
+                try
+                {
+                    string query = @"UPDATE Artists 
+                                    SET
+                                     Name = @Name, 
+                                     DateOfBirth = @DateOfBirth, 
+                                     Country = @Country, 
+                                     Biography = @Biography
+                                    WHERE Id = @Id
+                                    ;";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+
+                        command.Parameters.AddWithValue("@Id", artist.Id);
+                        command.Parameters.AddWithValue("@Name", artist.Name);
+                        command.Parameters.AddWithValue("@DateOfBirth", artist.DateOfBirth);
+                        command.Parameters.AddWithValue("@Country", artist.Country);
+                        command.Parameters.AddWithValue("@Biography", artist.Biography);
+
+                        connection.Open();
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch(MySqlException ex)
+                {
+                    Console.WriteLine($"Error while updating artists: {ex.Message}");
+
+                }
+            }
+        }
+
 
     }
 }
