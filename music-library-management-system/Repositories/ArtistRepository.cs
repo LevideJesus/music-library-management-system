@@ -94,6 +94,53 @@ namespace music_library_management_system.Repositories
             return artists;
         }
 
+        public Artist GetArtistById(int id)
+        {
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
+            {
+                try
+                {
+                    string query = @"SELECT
+                                Id,
+                                Name,
+                                DateOfBirth,
+                                Country,
+                                Biography
+                             FROM Artists
+                             WHERE Id = @Id;";
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", id);
+
+                        connection.Open();
+
+                        MySqlDataReader reader = command.ExecuteReader();
+
+                        if (reader.Read())
+                        {
+                            Artist artist = new Artist
+                            {
+                                Id = reader.GetInt32("Id"),
+                                Name = reader.GetString("Name"),
+                                DateOfBirth = reader.GetDateTime("DateOfBirth"),
+                                Country = reader.GetString("Country"),
+                                Biography = reader.GetString("Biography")
+                            };
+
+                            return artist;
+                        }
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    Console.WriteLine($"Error while reading artist: {ex.Message}");
+                }
+            }
+
+            return null;
+        }
+
         public void UpdateArtist(Artist artist)
         {
             using (MySqlConnection connection = _databaseConnection.GetConnection())
