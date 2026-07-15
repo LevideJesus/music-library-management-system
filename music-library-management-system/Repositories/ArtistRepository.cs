@@ -130,6 +130,31 @@ namespace music_library_management_system.Repositories
             }
         }
 
+        public void DeleteArtist(int id)
+        {
+            using (MySqlConnection connection = _databaseConnection.GetConnection())
+            {
+                try
+                {
+                    string query = @"DELETE FROM Artists
+                                     WHERE Id = @Id";
+                    using(MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+
+                        command.Parameters.AddWithValue("@Id", id);
+
+                        connection.Open();
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch(MySqlException ex)
+                {
+                    Console.WriteLine($"Error while deleting artists: {ex.Message}");
+                }
+            }
+        }
+
 
     }
 }
